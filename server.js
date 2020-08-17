@@ -71,10 +71,13 @@ function newConnection(socket){
     socket.emit('victim_list_response', users[lobbyId]);
   });
 
-
   socket.on('get_random_user', (id)=>{
-    io.in(id).emit('random_user_response', users[id][Math.floor(users[id].length * Math.random())])
+    io.in(id).emit('random_user_response', users[id][Math.floor(users[id].length * Math.random())]);
   });
+
+  socket.on('ask_question', questionData=>{
+    io.in(questionData.lobby).emit('ask-victim', questionData);
+  })
 
   // socket.on('ask_question', (id)=>{
   //   io.in(id)

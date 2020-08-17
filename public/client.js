@@ -5,7 +5,7 @@ var numUsers = 0;
 var isHost = false;
 var socket;
 var lobby_id;
-var name;   // this client's name
+var name = "";   // this client's name
 var members;
 // $(document).ready(function(){    
     socket = io();
@@ -112,7 +112,7 @@ function endLobby(){
 
 function addUserToLobby(newname){
     numUsers++;
-    if(numUsers >= 1 && isHost && !(document.getElementById('start-button'))){
+    if(name!="" && numUsers >= 1 && isHost && !(document.getElementById('start-button'))){
         var start_btn = `<div class="button" onclick="endLobby()" id="start-button">START GAME</div>`;
         document.getElementById("lobby-label").insertAdjacentHTML("beforebegin", start_btn);
     

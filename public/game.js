@@ -14,6 +14,12 @@ socket.on('victim_list_response', retList => {
     }
     }
 });
+socket.on('ask-victim', qData=>{
+    console.log('ask victim was called');
+    if(name == qData.victim){
+        console.log("IM THE VICTIM HERE");
+    }
+});
 
 
 var question;
@@ -83,20 +89,18 @@ function askingChoice(shotTaker) {
         queryGET('/choosevictim', res => {
             document.body.innerHTML = res;
             socket.emit('get_victim_list', lobby_id);
-            console.log(res);
-            socket.emit('ask_question', lobby_id);
             // document.getElementById('asking-field').value = '';
             console.log('i took shot weee');
         }, err => {
             console.log("Error: " + err);
         });
-
-        // socket.emit('')
     } else {
-
+        // if asker did not take shot
     }
 }
 
 function victimSelect(victimNum){
     console.log(victimList[victimNum]);
+    questionReq = {"asker":name, "lobby":lobby_id, "question":question, "victim":victimList[victimNum]};
+    socket.emit('ask_question', questionReq);
 }
