@@ -16,8 +16,25 @@ socket.on('victim_list_response', retList => {
 });
 socket.on('ask-victim', qData=>{
     console.log('ask victim was called');
-    if(name == qData.victim){
-        console.log("IM THE VICTIM HERE");
+    if(name == qData.victim){    // this user is the victim and receives the question
+        queryGET('/chooseanswer', res => {
+            document.body.innerHTML = res;
+            console.log("IM THE VICTIM HERE");
+            console.log(qData.question);
+            socket.emit('selecting-answer', qData);
+        }, err => {
+            console.log("Error: " + err);
+        });
+    }
+});
+socket.on('answer_list_response', retList => {
+    console.log(retList);
+    victimList = retList;
+    for (i = 0; i < victimList.length; i++) {
+        if(victimList[i] != name){
+            var lobby_user = `<div style=" animation: slideIn .2s ease-out forwards;" class="lobby-user button" onclick="victimSelect(`+i+`)">` +victimList[i]+ `</div>`;
+            document.getElementById("lobby-list").insertAdjacentHTML("beforeend", lobby_user)
+    }
     }
 });
 
@@ -67,15 +84,6 @@ function askQuestion() {
         console.log('IM ASKING WEEE');
         queryGET('/asking', res => {
             document.body.innerHTML = res;
-            // document.getElementById('asking-field').addEventListener('keypress', e=>{
-            //     if(window.event.keyCode==13){e.preventDefault()}else{return;}
-            //     if(document.getElementById('asking-field').value==''){alert('Ask a question, fool.');return;}
-            //     question = document.getElementById('asking-field').value;
-            //     socket.emit('ask_question', question)
-            //     document.getElementById('asking-field').value='';
-
-            // });
-
         }, err => {
             console.log("Error: " + err);
         });

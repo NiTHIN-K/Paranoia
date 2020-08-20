@@ -18,7 +18,8 @@ app.use(express.static('public'))
 .get('/game', (req, res) => res.render('pages/game'))
 .get('/lobby', (req, res) => res.render('pages/lobby'))
 .get('/asking', (req, res) => res.render('pages/asking'))
-.get('/choosevictim', (req, res) => res.render('pages/choosevictim'));
+.get('/choosevictim', (req, res) => res.render('pages/choosevictim'))
+.get('/chooseanswer', (req, res) => res.render('pages/chooseanswer'));
 
 var io = socket(server);
 io.sockets.on('connection', newConnection);
@@ -65,6 +66,11 @@ function newConnection(socket){
 
   socket.on('get_current_users', lobbyId=>{
     socket.emit('get_current_users_response', users[lobbyId]);
+  });
+
+  socket.on('selecting-answer', questionData=>{
+    console.log(users[questionData.lobby]);
+    socket.emit('answer_list_response', users[questionData.lobby]);
   });
 
   socket.on('get_victim_list', lobbyId=>{
