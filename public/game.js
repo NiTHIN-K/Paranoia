@@ -32,7 +32,7 @@ socket.on('answer_list_response', retList => {
     victimList = retList;
     for (i = 0; i < victimList.length; i++) {
         if(victimList[i] != name){
-            var lobby_user = `<div style=" animation: slideIn .2s ease-out forwards;" class="lobby-user button" onclick="victimSelect(`+i+`)">` +victimList[i]+ `</div>`;
+            var lobby_user = `<div style=" animation: slideIn .2s ease-out forwards;" class="lobby-user button" onclick="endRound(`+i+`)">` +victimList[i]+ `</div>`;
             document.getElementById("lobby-list").insertAdjacentHTML("beforeend", lobby_user)
     }
     }
@@ -111,4 +111,8 @@ function victimSelect(victimNum){
     console.log(victimList[victimNum]);
     questionReq = {"asker":name, "lobby":lobby_id, "question":question, "victim":victimList[victimNum]};
     socket.emit('ask_question', questionReq);
+}
+
+function endRound(answerChoiceNum){
+    //TODO
 }

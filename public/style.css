@@ -250,6 +250,13 @@ p{
     text-align: center;
 }
 
+#answerer-name {
+    visibility: hidden;
+    line-height: 10px;
+    font-family: "Futura";
+    text-align: center;
+}
+
 #is-asking {
     visibility: hidden;
     font-size: 16px;
