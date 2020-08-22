@@ -257,8 +257,23 @@ p{
     text-align: center;
 }
 
+#final-name {
+    line-height: 10px;
+    /* visibility: hidden; */
+    line-height: 10px;
+    font-family: "Futura";
+    text-align: center;
+}
+
+#final-name {
+    line-height: 10px;
+    font-family: "Futura";
+    text-align: center;
+}
+
+
 #is-asking {
-    visibility: hidden;
+    /* visibility: hidden; */
     font-size: 16px;
 }
 

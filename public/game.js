@@ -1,4 +1,5 @@
 var victimList = {};
+var questionData;
 socket.on('random_user_response', name => {
     chosenName = name;
     console.log('before brryt');
@@ -15,6 +16,7 @@ socket.on('victim_list_response', retList => {
     }
 });
 socket.on('ask-victim', qData=>{
+    questionData = qData;
     console.log('ask victim was called');
     if(name == qData.victim){    // this user is the victim and receives the question
         queryGET('/chooseanswer', res => {
@@ -25,6 +27,9 @@ socket.on('ask-victim', qData=>{
         }, err => {
             console.log("Error: " + err);
         });
+    }
+    else if(name != qData.asker){  // this user is not participating in this question
+
     }
 });
 socket.on('answer_list_response', retList => {
@@ -38,9 +43,30 @@ socket.on('answer_list_response', retList => {
     }
 });
 
+var askedaQ = "<span id='is-asking'><br>ASKED A QUESTION TO...</span>";
+var whoAnsWit =  "<span id='is-asking'><br>WHO ANSWERED WITH...</span>";
+
+socket.on('show_final_results', finalQData=>{   // Displaying final results
+    console.log(finalQData);
+    queryGET('/finalanswer', res=>{
+        document.body.innerHTML = res;
+        document.getElementById('asker-name').innerHTML = finalQData.qData.asker + askedaQ;
+        document.getElementById('answerer-name').style.visibility = "visible";
+
+        document.getElementById('answerer-name').innerHTML = finalQData.qData.victim + whoAnsWit + finalQData.ans;
+        console.log('I have finished displaying both the asker and the asnwer or im dumb');
+        setTimeout(()=>{
+            startGame();
+        }, 5000);
+      }, err=>{
+        console.log("Error: " + err);
+      });
+});
+
 
 var question;
 var chosenName;
+
 var areAsking = "<span id='is-asking'><br>ARE ASKING A QUESTION...</span>";
 var isAsking = "<span id='is-asking'><br>IS ASKING A QUESTION...</span>";
 function startGame() {
@@ -79,6 +105,7 @@ function brrrrt(count, curve) {
 
 }
 
+
 function askQuestion() {
     if (name == chosenName) {
         console.log('IM ASKING WEEE');
@@ -114,5 +141,10 @@ function victimSelect(victimNum){
 }
 
 function endRound(answerChoiceNum){
+    console.log('ENGAME');
+    var finalAnswer = victimList[answerChoiceNum];// todo get name from answerchoicenum
+    qAndAns = {"qData": questionData, "ans": finalAnswer}
+    socket.emit('end_round', qAndAns);    //todo emit endround
+    console.log('ENGAME EMITTED SOCKETFUCK');
     //TODO
 }

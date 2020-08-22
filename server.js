@@ -19,7 +19,9 @@ app.use(express.static('public'))
 .get('/lobby', (req, res) => res.render('pages/lobby'))
 .get('/asking', (req, res) => res.render('pages/asking'))
 .get('/choosevictim', (req, res) => res.render('pages/choosevictim'))
-.get('/chooseanswer', (req, res) => res.render('pages/chooseanswer'));
+.get('/chooseanswer', (req, res) => res.render('pages/chooseanswer'))
+.get('/finalanswer', (req, res) => res.render('pages/finalanswer'));
+
 
 var io = socket(server);
 io.sockets.on('connection', newConnection);
@@ -83,7 +85,12 @@ function newConnection(socket){
 
   socket.on('ask_question', questionData=>{
     io.in(questionData.lobby).emit('ask-victim', questionData);
-  })
+  });
+
+  socket.on('end_round', questionData=>{
+    console.log('ROUND END');
+    io.in(questionData.qData.lobby).emit('show_final_results', questionData);
+  });
 
   // socket.on('ask_question', (id)=>{
   //   io.in(id)
