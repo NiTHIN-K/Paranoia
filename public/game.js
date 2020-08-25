@@ -57,7 +57,7 @@ socket.on('show_final_results', finalQData=>{   // Displaying final results
         console.log('I have finished displaying both the asker and the asnwer or im dumb');
         setTimeout(()=>{
             startGame();
-        }, 5000);
+        }, 2500);
       }, err=>{
         console.log("Error: " + err);
       });
