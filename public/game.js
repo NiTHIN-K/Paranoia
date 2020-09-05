@@ -21,6 +21,7 @@ socket.on('ask-victim', qData=>{
     if(name == qData.victim){    // this user is the victim and receives the question
         queryGET('/chooseanswer', res => {
             document.body.innerHTML = res;
+            document.getElementById('question').innerHTML = "QUESTION: " + questionData.question + "<br>CHOOSE ANSWER:";
             console.log("IM THE VICTIM HERE");
             console.log(qData.question);
             socket.emit('selecting-answer', qData);
