@@ -71,6 +71,10 @@ socket.on('flip_result', flipResult=>{
     }else{
         document.getElementById('asker-name').innerHTML = "TAILS!!!";
     }
+
+    setTimeout(()=>{
+        startGame();
+    }, 5000);
 });
 
 function headsTails(){
