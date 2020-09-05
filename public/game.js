@@ -44,8 +44,8 @@ socket.on('answer_list_response', retList => {
     }
 });
 
-var askedaQ = "<span id='is-asking'><br>ASKED A QUESTION TO...</span>";
-var whoAnsWit =  "<span id='is-asking'><br>WHO ANSWERED WITH...</span>";
+var askedaQ = "<span id='is-asking'><br>ASKED A QUESTION TO...<br></span>";
+var whoAnsWit =  "<span id='is-asking'><br>WHO ANSWERED WITH...<br></span>";
 
 socket.on('show_final_results', finalQData=>{   // Displaying final results
     console.log(finalQData);
