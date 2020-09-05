@@ -56,12 +56,26 @@ socket.on('show_final_results', finalQData=>{   // Displaying final results
         document.getElementById('answerer-name').innerHTML = finalQData.qData.victim + whoAnsWit + finalQData.ans;
         console.log('I have finished displaying both the asker and the asnwer or im dumb');
         setTimeout(()=>{
-            startGame();
-        }, 2500);
+            if(name == finalQData.qData.asker){
+                socket.emit("headsTails", lobby_id);
+            }
+        }, 5000);
       }, err=>{
         console.log("Error: " + err);
       });
 });
+
+socket.on('flip_result', flipResult=>{
+    if(flipResult){
+        document.getElementById('asker-name').innerHTML = questionData.asker + " ASKED " + questionData.question;
+    }else{
+        document.getElementById('asker-name').innerHTML = "TAILS!!!";
+    }
+});
+
+function headsTails(){
+
+}
 
 
 var question;

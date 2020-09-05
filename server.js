@@ -92,6 +92,10 @@ function newConnection(socket){
     io.in(questionData.qData.lobby).emit('show_final_results', questionData);
   });
 
+  socket.on('headsTails', id=>{
+    io.in(id).emit('flip_result', Math.round(Math.random()));
+  });
+
   // socket.on('ask_question', (id)=>{
   //   io.in(id)
   // });
