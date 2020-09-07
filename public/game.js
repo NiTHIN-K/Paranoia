@@ -5,15 +5,19 @@ socket.on('random_user_response', name => {
     console.log('before brryt');
     brrrrt(0, 10);
 });
-socket.on('victim_list_response', retList => {
-    console.log(retList);
-    victimList = retList;
+socket.on('victim_list_response', retVal => {  //  Asker is taking a shot
+    console.log("VICTIMLISTRESPONSE" + JSON.stringify(retVal));
+    victimList = retVal.victimList;
+    if(retVal.asker == name){
     for (i = 0; i < victimList.length; i++) {
         if(victimList[i] != name){
             var lobby_user = `<div style=" animation: slideIn .2s ease-out forwards;" class="lobby-user button" onclick="victimSelect(`+i+`)">` +victimList[i]+ `</div>`;
             document.getElementById("lobby-list").insertAdjacentHTML("beforeend", lobby_user)
+        }
     }
-    }
+}else{
+    document.getElementById("asker-name").insertAdjacentHTML("afterend", "<br>TOOK A SHOT!")
+}
 });
 socket.on('ask-victim', qData=>{
     questionData = qData;
@@ -139,10 +143,12 @@ function askQuestion() {
 function askingChoice(shotTaker) {
     if (document.getElementById('asking-field').value == '') { alert('Ask a question, fool.'); return; }
     question = document.getElementById('asking-field').value;
+    var reqdata = {asker: name, id: lobby_id};
+    console.log(JSON.stringify(reqdata));
     if (shotTaker == 1) {
         queryGET('/choosevictim', res => {
             document.body.innerHTML = res;
-            socket.emit('get_victim_list', lobby_id);
+            socket.emit('get_victim_list', reqdata);
             // document.getElementById('asking-field').value = '';
             console.log('i took shot weee');
         }, err => {

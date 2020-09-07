@@ -75,8 +75,11 @@ function newConnection(socket){
     socket.emit('answer_list_response', users[questionData.lobby]);
   });
 
-  socket.on('get_victim_list', lobbyId=>{
-    socket.emit('victim_list_response', users[lobbyId]);
+  socket.on('get_victim_list', reqdata=>{ //  Asker is taking shot
+    var retdata = {asker: reqdata.asker, victimList: users[reqdata.id]}
+    //console.log("THE ASKER IS " + reqdata.asker)
+    console.log(JSON.stringify(reqdata));
+    io.in(reqdata.id).emit('victim_list_response', retdata);
   });
 
   socket.on('get_random_user', (id)=>{
