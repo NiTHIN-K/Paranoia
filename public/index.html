@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Paranoia is a real-time social party game for three to twelve players."
+    >
+    <meta name="theme-color" content="#171713">
+    <title>Paranoia — a real-time party game</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="wordmark" href="/" aria-label="Paranoia home">
+          <span class="wordmark-mark" aria-hidden="true"></span>
+          PARANOIA
+        </a>
+        <div class="connection" aria-live="polite">
+          <span id="connection-dot" class="connection-dot"></span>
+          <span id="connection-label">Connecting</span>
+        </div>
+      </header>
+
+      <main id="app">
+        <section id="home-view" class="view home-view">
+          <div class="hero">
+            <p class="eyebrow">A real-time social game</p>
+            <h1>Ask carefully.<br>Answer honestly.</h1>
+            <p class="hero-copy">
+              Pick a player, ask the question, and let a coin decide whether the truth comes out.
+              No download. One room code. Three to twelve players.
+            </p>
+          </div>
+
+          <div class="setup-grid" aria-label="Start playing">
+            <form id="create-form" class="setup-card">
+              <div>
+                <p class="step-number">01</p>
+                <h2>Start a room</h2>
+                <p>Host the game and share a four-digit code with your group.</p>
+              </div>
+              <label for="create-name">Your name</label>
+              <input
+                id="create-name"
+                name="name"
+                type="text"
+                minlength="2"
+                maxlength="20"
+                autocomplete="nickname"
+                placeholder="Nithin"
+                required
+              >
+              <button class="button button-primary" type="submit">Create room</button>
+            </form>
+
+            <form id="join-form" class="setup-card setup-card-dark">
+              <div>
+                <p class="step-number">02</p>
+                <h2>Join the group</h2>
+                <p>Enter the room code from the host and choose a unique name.</p>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="join-code">Room code</label>
+                  <input
+                    id="join-code"
+                    name="code"
+                    class="code-input"
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]{4}"
+                    maxlength="4"
+                    autocomplete="off"
+                    placeholder="0000"
+                    required
+                  >
+                </div>
+                <div>
+                  <label for="join-name">Your name</label>
+                  <input
+                    id="join-name"
+                    name="name"
+                    type="text"
+                    minlength="2"
+                    maxlength="20"
+                    autocomplete="nickname"
+                    placeholder="Maya"
+                    required
+                  >
+                </div>
+              </div>
+              <button class="button button-light" type="submit">Join room</button>
+            </form>
+          </div>
+
+          <div class="how-it-works" aria-label="How to play">
+            <p>Ask a question</p>
+            <span aria-hidden="true">→</span>
+            <p>Name a player</p>
+            <span aria-hidden="true">→</span>
+            <p>Flip for the reveal</p>
+          </div>
+        </section>
+
+        <section id="lobby-view" class="view" hidden>
+          <div class="room-layout">
+            <div class="room-intro">
+              <p class="eyebrow">Your room is ready</p>
+              <h1>Bring everyone in.</h1>
+              <p>
+                Share the code, keep this tab open, and start when at least three players have joined.
+              </p>
+
+              <div class="room-code-block">
+                <p>Room code</p>
+                <button id="copy-code" class="room-code" type="button" title="Copy room code">
+                  <span id="room-code">0000</span>
+                  <span class="copy-label">Copy</span>
+                </button>
+              </div>
+
+              <div class="lobby-actions">
+                <button id="start-game" class="button button-primary" type="button">
+                  Start game
+                </button>
+                <button class="button button-ghost leave-room" type="button">Leave room</button>
+              </div>
+              <p id="lobby-hint" class="hint" aria-live="polite"></p>
+            </div>
+
+            <aside class="player-panel">
+              <div class="panel-heading">
+                <h2>Players</h2>
+                <span id="player-count" class="count-pill">0 / 12</span>
+              </div>
+              <ol id="player-list" class="player-list"></ol>
+            </aside>
+          </div>
+        </section>
+
+        <section id="game-view" class="view" hidden>
+          <div class="game-header">
+            <div>
+              <p class="eyebrow">Room <span id="game-room-code">0000</span></p>
+              <p id="round-label" class="round-label">Round 1</p>
+            </div>
+            <button class="button button-ghost button-small leave-room" type="button">
+              Leave
+            </button>
+          </div>
+
+          <div class="game-layout">
+            <section id="game-stage" class="game-stage" aria-live="polite"></section>
+
+            <aside class="player-panel player-panel-compact">
+              <div class="panel-heading">
+                <h2>In the room</h2>
+                <span id="game-player-count" class="count-pill">0</span>
+              </div>
+              <ol id="game-player-list" class="player-list"></ol>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Questions disappear when the room closes.</p>
+        <p>Built for the people in the room.</p>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
